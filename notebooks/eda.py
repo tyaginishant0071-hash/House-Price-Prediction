@@ -323,3 +323,48 @@ train_df.drop(columns='SalePrice_log', inplace=True)
 
 
 # 9: Data Quality Checks
+# Checking duplicate rows in "train_df":
+duplicate_rows= train_df.duplicated().sum()
+print(f"Number of duplicate rows in train_df: {duplicate_rows}\n")
+
+# Checking duplicate rows in "test_df":
+duplicate_rows_test= test_df.duplicated().sum()
+print(f"Number of duplicate rows in test_df: {duplicate_rows_test}\n")
+
+# Checking duplicate 'Id' in both dataset:
+duplicate_id= train_df['Id'].duplicated().sum()
+print(f"Number of duplicate 'Id' in train_df: {duplicate_id}\n")
+duplicate_id_test= test_df['Id'].duplicated().sum()
+print(f"Number of duplicate 'Id' in test_df: {duplicate_id_test}\n")
+
+# Checking "SalePrice" contain any missing value:
+missing_saleprice= train_df['SalePrice'].isnull().sum()
+print(f"Number of missing 'SalePrice' in train_df: {missing_saleprice}\n")
+
+# Checking for infinite numbers in numerical columns:
+infinite_values= numerical_cols.isin([np.inf, -np.inf]).sum()
+print(f"Number of infinite values in numerical columns: \n{infinite_values}\n")
+
+# Comparing train and test columns, excluding "SalesPrice":
+train_cols= set(train_df.columns)- {'SalePrice'}
+test_cols= set(test_df.columns)
+missing_cols= train_cols.difference(test_cols)
+extra_cols= test_cols.difference(train_cols)
+print(f"Columns missing in test_df: {len(missing_cols)}\n")
+print(f"Columns extra in test_df: {len(extra_cols)}\n")
+
+# Verifying the shape of both the datasets:
+print(f"Shape of train_df: {train_df.shape[1]}\n")
+print(f"Shape of test_df: {test_df.shape[1]}\n")
+
+# Verifying the "SalePrice" contains 0 or negative value:
+neg_0_val= (train_df['SalePrice'] <= 0).astype(int).sum()
+print(f"Number of 0 or negative values in 'SalePrice': {neg_0_val}\n")
+
+# Checking columns with exactly one unique value across all columns in both datasets:
+unique_counts_train= train_df.nunique(dropna= False)
+unique_counts_test= test_df.nunique(dropna= False)
+one_unique_value_train= unique_counts_train[unique_counts_train == 1]
+one_unique_value_test= unique_counts_test[unique_counts_test == 1]
+print(f"Columns with exactly one unique value in train_df: {len(one_unique_value_train)}\n")
+print(f"Columns with exactly one unique value in test_df: {len(one_unique_value_test)}\n")
