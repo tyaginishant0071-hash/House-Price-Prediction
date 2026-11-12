@@ -125,3 +125,121 @@ print(f"Top 10 features with the strongest positive correlations with SalePrice:
 #Displaying the 10 features with the strongest negative correlations with "SalePrice":
 top_10_neg_corr= corr_with_saleprice.iloc[::-1].head(10)
 print(f"Top 10 features with the strongest negative correlations with SalePrice: \n{top_10_neg_corr}\n")
+
+# 5: Categorical Feature Analysis
+# Counting the total categorical columns:
+print(f"Total categorical columns: {len(categorical_cols.columns)}\n")
+
+# Displaying the count of unique value in each categorical column:
+print(f"Unique values in each categorical column: \n{categorical_cols.nunique(dropna= False)}\n")
+
+# Identifying the categorical column with 'one' unique value:
+unique_counts = categorical_cols.nunique()
+one_unique_value = unique_counts[unique_counts == 1]
+print(f"Categorical column with 'one' unique value: \n{len(one_unique_value)}\n")
+
+# Displaying value counts for "MSZoning", "Neighborhood", "HouseStyle", and "SaleCondition":
+value_counts_cols= ['MSZoning', 'Neighborhood', 'HouseStyle', 'SaleCondition']
+for cols in value_counts_cols:
+  value_count= categorical_cols[cols].value_counts()
+  print(f"Value counts for the selected columns: \n{ value_count}\n")
+
+# Creating countplots for "MSZoning", "HouseStyle", and "SaleCondition":
+countplot_cols= ['MSZoning', 'HouseStyle', 'SaleCondition']
+
+fig, axes_3= plt.subplots(nrows= 3, ncols= 1, figsize= (10, 8))
+axes_3= axes_3.flatten()
+
+for c_cols, ax_3 in zip(countplot_cols, axes_3):
+  sns.countplot(data= categorical_cols, x= c_cols, ax= ax_3)
+  ax_3.set_title(f'Countplot of {c_cols}')
+  ax_3.set_xlabel(c_cols)
+  ax_3.set_ylabel('Count')
+
+plt.tight_layout()
+plt.show()
+
+# Identifying the 10 most frequent neighborhoods:
+frequent_neighborhoods= categorical_cols['Neighborhood'].value_counts().head(10)
+print(f"10 most frequent neighborhoods: \n{frequent_neighborhoods}\n")
+
+# Calculating avg "SalePrice" of each neighborhood:
+avg_saleprice_neighborhood= train_df.groupby('Neighborhood')['SalePrice'].mean()
+print(f"Average SalePrice of each neighborhood: \n{round(avg_saleprice_neighborhood, 4)}\n")
+
+# Calculating avg "SalePrice" for each "MSZoning" category:
+avg_saleprice_zoning= train_df.groupby('MSZoning')['SalePrice'].mean()
+print(f"Average SalePrice for each MSZoning category: \n{round(avg_saleprice_zoning, 4)}\n")
+
+# Creating 'boxplots' comparing "SalePrice" across "Neighborhood", "MSZoning", and "HouseStyle":
+boxplot_cols_2= ['Neighborhood', 'MSZoning', 'HouseStyle']
+
+fig, axes_4= plt.subplots(nrows= 3, ncols= 1, figsize= (18, 16))
+axes_4= axes_4.flatten()
+
+for box_cols, ax_4 in zip(boxplot_cols_2, axes_4):
+  sns.boxplot(data= train_df, x= box_cols, y= 'SalePrice', ax= ax_4)
+  ax_4.set_title(f'Boxplot of SalePrice by {box_cols}')
+  ax_4.set_xlabel(box_cols)
+  ax_4.set_ylabel('SalePrice')
+  ax_4.tick_params(axis='x', rotation=45)
+
+plt.tight_layout()
+plt.show()
+
+# 6: Outlier Analysis
+# Select numerical features for outlier analysis, excluding Id:
+numerical_cols_outlier= numerical_cols.drop(columns= ['Id'])
+outlier_cols= numerical_cols_outlier.columns
+print(f"Numerical columns for outlier analysis: \n{outlier_cols}\n")
+
+# Calculating Q1 (25th percentile) for each column:
+Q1= numerical_cols_outlier.quantile(0.25)
+print(f"Q1 (25th percentile) for each column: \n{Q1}\n")
+
+# Calculating Q3 (75th percentile) for each column:
+Q3= numerical_cols_outlier.quantile(0.75)
+print(f"Q3 (75th percentile) for each column: \n{Q3}\n")
+
+# Calculating IQR:
+IQR= Q3 - Q1
+print(f"Interquartile Range (IQR) for each column: \n{IQR}\n")
+
+# Calculating lower bound:
+lower_bound= Q1 - 1.5 * IQR
+print(f"Lower bound for each column: \n{lower_bound}\n")
+
+# Calculating upper bound:
+upper_bound= Q3 + 1.5 * IQR
+print(f"Upper bound for each column: \n{upper_bound}\n")
+
+# Counting potential outlier in each numerical feature:
+outlier_count= ((numerical_cols_outlier < (lower_bound)) | (numerical_cols_outlier > (upper_bound)))
+print(f"Potential outlier in each numerical feature: \n{outlier_count.sum()}\n")
+
+# Calculting percentage of potential outlier in each numerical feature:
+outlier_percentage = (outlier_count.mean() * 100).round(2)
+print(f"Potential outlier in each numerical feature: \n{outlier_percentage}\n")
+
+# Displaying the 10 features with highest outlier count:
+top_10_outliers_fea= outlier_count.sum().sort_values(ascending= False).head(10)
+print(f"Top 10 features with highest outlier count: \n{top_10_outliers_fea}\n")
+
+# Inspecting potential outliers in "GrLivArea", "LotArea", and "SalePrice":
+fea_outlier= ['GrLivArea', 'LotArea', 'SalePrice']
+
+for out in fea_outlier:
+
+  flagged_rows= numerical_cols[outlier_count[out]]
+  sorted_fea= flagged_rows.sort_values(by= out, ascending= False)
+
+  if out == "SalePrice":
+    cols_to_show= ['Id', 'SalePrice']
+  
+  else:
+    cols_to_show= ['Id', out, 'SalePrice']
+
+  print(f"Potential outliers in {out}\n"
+        f"Lower bound: {lower_bound[out]} | Upper bound: {upper_bound[out]}\n"
+        f"Number of flagged rows: {len(flagged_rows)}\n"
+        f"{sorted_fea[cols_to_show]}\n")
