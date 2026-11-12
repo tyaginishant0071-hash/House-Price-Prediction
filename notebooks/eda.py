@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+
 # 1: Load and inspect the dataset
 # Dataset loaded:
 train_df= pd.read_csv('data/raw/train.csv')
@@ -14,6 +15,7 @@ print(f"First 5 rows of the train dataset: \n{train_df.head()}\n")
 # Checking the shape of both the datasets:
 print(f"Shape of the train dataset: {train_df.shape}\n")
 print(f"Shape of the test dataset: {test_df.shape}\n")
+
 
 # 2: Data Types and Basic Statistics
 # Checking the columns name in the training dataset:
@@ -36,6 +38,7 @@ print(f"Descriptive statistics for numerical columns: \n{numerical_cols.describe
 # Generating descriptive statistics for categorical features:
 categorical_cols= train_df.select_dtypes(include= categorical)
 print(f"Descriptive statistics for categorical columns: \n{categorical_cols.describe()}\n")
+
 
 # 3: Missing Value Analysis
 # Calculating missing values for each training column:
@@ -61,6 +64,7 @@ print(f"Missing values in the test dataset: \n{test_df.isnull().sum()}\n")
 
 # Checking the "SalePrice" has missing value:
 print(f"Missing value in SalePrice: \n{train_df['SalePrice'].isnull().sum()}\n")
+
 
 # 4: Numerical Feature Analysis
 # Count of numerical columns in "train_df":
@@ -126,6 +130,7 @@ print(f"Top 10 features with the strongest positive correlations with SalePrice:
 top_10_neg_corr= corr_with_saleprice.iloc[::-1].head(10)
 print(f"Top 10 features with the strongest negative correlations with SalePrice: \n{top_10_neg_corr}\n")
 
+
 # 5: Categorical Feature Analysis
 # Counting the total categorical columns:
 print(f"Total categorical columns: {len(categorical_cols.columns)}\n")
@@ -187,6 +192,7 @@ for box_cols, ax_4 in zip(boxplot_cols_2, axes_4):
 plt.tight_layout()
 plt.show()
 
+
 # 6: Outlier Analysis
 # Select numerical features for outlier analysis, excluding Id:
 numerical_cols_outlier= numerical_cols.drop(columns= ['Id'])
@@ -243,3 +249,77 @@ for out in fea_outlier:
         f"Lower bound: {lower_bound[out]} | Upper bound: {upper_bound[out]}\n"
         f"Number of flagged rows: {len(flagged_rows)}\n"
         f"{sorted_fea[cols_to_show]}\n")
+  
+
+# 7: Correlation Heatmap
+# Calculating the pearson correlation matrix:
+corr_matrix= numerical_cols_outlier.corr()
+print(f"Pearson correlation matrix: \n{corr_matrix}\n")
+
+# Creating a correlation heatmap using 'Seaborn':
+plt.figure(figsize= (28, 24))
+sns.heatmap(corr_matrix, annot= True, cmap= 'coolwarm', linewidths= 0.5)
+plt.title('Correlation Heatmap')
+plt.show()
+
+# Identifying the 5 strongest positive correlation with "SalePrice":
+top_5_pos_corr= corr_matrix['SalePrice'].sort_values(ascending= False).iloc[1:6]
+print(f"Top 5 strongest positive correlation with SalePrice: \n{top_5_pos_corr}\n")
+
+# Identifying the 5 strongest negative correlation with "SalePrice":
+top_5_neg_corr= corr_matrix['SalePrice'].sort_values(ascending= True).head()
+print(f"Top 5 strongest negative correlation with SalePrice: \n{top_5_neg_corr}\n")
+
+# Checking for highly correlated feature pairs (absolute correlation greater than 0.80), excluding self-correlations and duplicate pairs:
+upper_tri = corr_matrix.where(np.triu(np.ones(corr_matrix.shape, dtype=bool), k=1))
+corr_fea_pairs = upper_tri.stack().reset_index()
+corr_fea_pairs.columns = ['Feature 1', 'Feature 2', 'Feature correlation']
+corr_fea_pairs = corr_fea_pairs[corr_fea_pairs['Feature correlation'].abs() > 0.80]
+corr_fea_pairs = corr_fea_pairs.sort_values('Feature correlation', key=abs, ascending=False)
+print(f"Highly correlated feature pairs: \n{corr_fea_pairs}\n")
+
+
+# 8: Target Variable Analysis (SalePrice)
+# Calculating "SalePrice" - 'mean', 'median', 'standard deviation', 'minimum', and 'maximum':
+stats_saleprice= train_df['SalePrice'].agg(['mean', 'median', 'std', 'min', 'max'])
+print(f"SalePrice stats: \n{round(stats_saleprice, 4)}\n")
+
+# Calculating the skewness and kurtosis of "SalePrice":
+print(f"Skewness of SalePrice: {train_df['SalePrice'].skew():.4f}")
+print(f"Kurtosis of SalePrice: {train_df['SalePrice'].kurt():.4f}\n")
+
+# Applying a temporary 'log1p' transformation to "SalePrice" for comparison:
+train_df['SalePrice_log'] = np.log1p(train_df['SalePrice'])
+
+# Comparing original and log-transformed SalePrice distributions side by side:
+fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+sns.histplot(train_df['SalePrice'], bins=30, kde=True, ax=axes[0])
+axes[0].set_title('Original SalePrice')
+axes[0].set_xlabel('SalePrice')
+axes[0].set_ylabel('Frequency')
+
+sns.histplot(train_df['SalePrice_log'], bins=30, kde=True, ax=axes[1], color='darkorange')
+axes[1].set_title('Log-transformed SalePrice')
+axes[1].set_xlabel('log1p(SalePrice)')
+axes[1].set_ylabel('Frequency')
+
+plt.suptitle('Comparison of SalePrice Distributions', fontsize=14)
+plt.tight_layout()
+plt.show()
+
+# Calculating skewness after the log transformation:
+print(f"Skewness of log-transformed SalePrice: {train_df['SalePrice_log'].skew():.4f}")
+
+# Removing the temporary column so it can't leak into the feature matrix later:
+train_df.drop(columns='SalePrice_log', inplace=True)
+
+# "SalePrice" Distribution Observation:
+# Observation 1: Mean is higher that median.
+# Observation 2: "SalePrice" is highly right skew (Skewness of SalePrice: 1.8829).
+# Observation 3: Some houses have unusually high sale prices.
+# Observation 4: Log transformation reduces the positive skewness.
+# Observation 5: Most houses are concentrated in the lower-to-middle price range.
+
+
+# 9: Data Quality Checks
