@@ -8,3 +8,11 @@
 - The IQR rule flagged 1,657 cells across 897 training rows. Both datasets had zero duplicate rows and zero constant columns, and all training sale prices were positive.
 
 See the [full EDA report](reports/eda_summary.md) for methods, detailed findings, and planned preprocessing.
+
+## Data Cleaning
+
+- Split the labeled data into 80% training (1,168 rows) and 20% validation (292 rows) using `random_state=42`. The 1,459 test rows were cleaned separately.
+- Filled missing categorical values with `Unknown` and used medians calculated from the training split to fill missing numerical values in all three sets.
+- Verified that each cleaned feature set has 79 columns and zero missing values. Saved the cleaned features, training and validation targets, and test IDs in `data/processed/`.
+
+See the [full data cleaning report](reports/data_cleaning_summary.md) for details and the list of saved files.
