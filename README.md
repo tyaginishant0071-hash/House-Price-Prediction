@@ -16,3 +16,11 @@ See the [full EDA report](reports/eda_summary.md) for methods, detailed findings
 - Verified that each cleaned feature set has 79 columns and zero missing values. Saved the cleaned features, training and validation targets, and test IDs in `data/processed/`.
 
 See the [full data cleaning report](reports/data_cleaning_summary.md) for details and the list of saved files.
+
+## Feature Engineering
+
+- Added five numerical features across the training, validation, and test sets: `TotalSF`, `TotalBath`, `HouseAge`, `RemodAge`, and `TotalPorchSF`.
+- Set four negative engineered age values to zero. All three datasets have the same 84 columns in the same order, with zero missing values and zero negative engineered ages.
+- Saved the engineered feature sets as separate CSVs in `data/processed/`.
+
+See the [full feature engineering report](reports/feature_engineering_summary.md) for formulas, verification results, and output filenames.

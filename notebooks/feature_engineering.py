@@ -52,6 +52,10 @@ def feature_engineering(df):
   df_copy['RemodAge']= df_copy['YrSold'] - df_copy['YearRemodAdd']
   df_copy['TotalPorchSF']= df_copy['OpenPorchSF'] + df_copy['EnclosedPorch'] + df_copy['3SsnPorch'] + df_copy['ScreenPorch']
 
+  # Removing negative value from "HouseAge" and "RemodAge":
+  df_copy.loc[df_copy['HouseAge'] < 0, 'HouseAge']= 0
+  df_copy.loc[df_copy['RemodAge'] < 0, 'RemodAge']= 0
+
   return df_copy
 
 train_fe = feature_engineering(clean_train_df)
@@ -90,3 +94,32 @@ test_RemodeAge_neg_row= test_fe[(test_fe['RemodAge'] < 0) | (test_fe['HouseAge']
 # Shows only ('YrSold', 'YearBuilt', 'YearRemodAdd', 'HouseAge' and 'RemodAge')  for those rows:
 print(f"'train_fe' Rows where 'RemodAge' is negative: \n{train_RemodeAge_neg_row[['YrSold', 'YearBuilt', 'YearRemodAdd', 'HouseAge', 'RemodAge']]}\n")
 print(f"'test_fe' Rows where 'HouseAge' and 'RemodAge' is negative: \n{test_RemodeAge_neg_row[['YrSold', 'YearBuilt', 'YearRemodAdd', 'HouseAge', 'RemodAge']]}\n")
+
+
+# 6: Handle Negative Age Values
+# Negative values in both Age are handled in functions
+# Verifying that both Age columns contain zero negative values:
+print(f"Negative value in 'HouseAge': {(train_fe['HouseAge'] < 0).sum()}\n")
+print(f"Negative value in 'RemodAge': {(train_fe['RemodAge'] < 0).sum()}\n")
+
+# Confirming all the datasets have 84 columns:
+print(f"Shape of train_fe: {train_fe.shape}\n")
+print(f"Shape of val_fe: {val_fe.shape}\n")
+print(f"Shape of test_fe: {test_fe.shape}\n")
+
+# Checking negative values in "HouseAge" and "RemodAge" in "val_fe" and "test_fe":
+print(f"Negative value in 'HouseAge' in 'val_fe': {(val_fe['HouseAge'] < 0).sum()}\n")
+print(f"Negative value in 'RemodAge' in 'val_fe': {(val_fe['RemodAge'] < 0).sum()}\n")
+print(f"Negative value in 'HouseAge' in 'test_fe': {(test_fe['HouseAge'] < 0).sum()}\n")
+print(f"Negative value in 'RemodAge' in 'test_fe': {(test_fe['RemodAge'] < 0).sum()}\n")
+
+
+# 7: Save Engineered Datasets
+# Saving 'train_fe' as "X_train_fe.csv":
+train_fe.to_csv('data/processed/X_train_fe.csv', index= False)
+
+# Saving 'val_fe' as "X_val_fe.csv":
+val_fe.to_csv('data/processed/X_val_fe.csv', index= False)
+
+# Saving 'test_fe' as "X_test_fe.csv":
+test_fe.to_csv('data/processed/X_test_fe.csv', index= False)
