@@ -24,3 +24,11 @@ See the [full data cleaning report](reports/data_cleaning_summary.md) for detail
 - Saved the engineered feature sets as separate CSVs in `data/processed/`.
 
 See the [full feature engineering report](reports/feature_engineering_summary.md) for formulas, verification results, and output filenames.
+
+## Data Preprocessing
+
+- One-hot encoded 43 categorical features into 265 numerical columns and scaled the 41 original numerical features using `StandardScaler`. Both transformers were fitted on training data only and applied to training, validation, and test data.
+- The final datasets contain 306 numerical features with identical column order, zero missing values, and zero duplicate column names. Row counts are 1,168 for training, 292 for validation, and 1,459 for test.
+- Saved the preprocessed CSVs in `data/processed/` and the fitted transformers and feature-column lists in `models/`. The datasets are ready for model training and evaluation.
+
+See the [full data preprocessing report](reports/data_preprocessing_summary.md) for details and saved filenames.
