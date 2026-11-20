@@ -48,3 +48,11 @@ See the [full model training report](reports/model_training_summary.md) for mode
 - Saved the final model as `models/gradient_boosting_tuned.joblib` for generating test predictions.
 
 See the [full model optimization report](reports/model_optimization_summary.md) for tuning details and performance comparisons.
+
+## Final Predictions
+
+- Generated house-price predictions for all 1,459 test properties using the tuned Gradient Boosting model.
+- Verified prediction values and original ID order, with zero missing, infinite, or nonpositive sale prices.
+- Saved `data/processed/submission.csv` with `Id` and `SalePrice` columns, rounding prices to four decimal places. The file is ready for Kaggle upload; a submission score has yet to be verified.
+
+See the [full final prediction report](reports/final_prediction_summary.md) for validation details.
