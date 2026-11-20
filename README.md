@@ -56,3 +56,16 @@ See the [full model optimization report](reports/model_optimization_summary.md) 
 - Saved `data/processed/submission.csv` with `Id` and `SalePrice` columns, rounding prices to four decimal places. The file is ready for Kaggle upload; a submission score has yet to be verified.
 
 See the [full final prediction report](reports/final_prediction_summary.md) for validation details.
+
+### Kaggle Submission Results
+
+- **Competition:** House Prices — Advanced Regression Techniques
+- **Final Model:** Tuned Gradient Boosting Regressor
+- **Submission File:** `data/processed/submission.csv`
+- **Submission Status:** Successfully Completed
+- **Public Leaderboard Score (RMSLE):** 0.13251
+- **Total Test Predictions:** 1,459
+
+The tuned Gradient Boosting model successfully generated predictions for all Kaggle test records.
+
+The submission was accepted and evaluated by Kaggle, achieving a public leaderboard RMSLE score of **0.13251**.

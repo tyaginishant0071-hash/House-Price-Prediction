@@ -32,3 +32,16 @@ The submission has 1,459 rows and two columns.
 ## 5. Conclusion
 
 Final test predictions were generated and verified. The submission file is ready for upload to Kaggle. A Kaggle submission score has yet to be verified.
+
+### Kaggle Submission Results
+
+- **Competition:** House Prices — Advanced Regression Techniques
+- **Final Model:** Tuned Gradient Boosting Regressor
+- **Submission File:** `data/processed/submission.csv`
+- **Submission Status:** Successfully Completed
+- **Public Leaderboard Score (RMSLE):** 0.13251
+- **Total Test Predictions:** 1,459
+
+The tuned Gradient Boosting model successfully generated predictions for all Kaggle test records.
+
+The submission was accepted and evaluated by Kaggle, achieving a public leaderboard RMSLE score of **0.13251**.
