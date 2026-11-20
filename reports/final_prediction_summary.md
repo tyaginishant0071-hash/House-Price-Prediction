@@ -31,7 +31,7 @@ The submission has 1,459 rows and two columns.
 
 ## 5. Conclusion
 
-Final test predictions were generated and verified. The submission file is ready for upload to Kaggle. A Kaggle submission score has yet to be verified.
+The submission file was successfully uploaded to Kaggle and achieved a public leaderboard RMSLE score of 0.13251.
 
 ### Kaggle Submission Results
 
