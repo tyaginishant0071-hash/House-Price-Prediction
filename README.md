@@ -32,3 +32,19 @@ See the [full feature engineering report](reports/feature_engineering_summary.md
 - Saved the preprocessed CSVs in `data/processed/` and the fitted transformers and feature-column lists in `models/`. The datasets are ready for model training and evaluation.
 
 See the [full data preprocessing report](reports/data_preprocessing_summary.md) for details and saved filenames.
+
+## Model Training and Evaluation
+
+- Trained Linear Regression, Random Forest, and Gradient Boosting models using 1,168 training rows with 306 features, then evaluated them on 292 validation rows using MAE, RMSE, and R².
+- Gradient Boosting achieved the best validation performance, with MAE of 16,360.67, RMSE of 26,772.24, and R² of 0.9066.
+- Selected Gradient Boosting for further hyperparameter tuning in the Model Optimization phase.
+
+See the [full model training report](reports/model_training_summary.md) for model parameters and comparison results.
+
+## Model Optimization
+
+- Tuned Gradient Boosting using GridSearchCV with 5-fold cross-validation across eight parameter combinations. The best settings were `n_estimators=200`, `learning_rate=0.1`, and `max_depth=3`.
+- The tuned model achieved validation MAE of 15,864.42, RMSE of 26,239.98, and R² of 0.9102, improving all three metrics over the original model.
+- Saved the final model as `models/gradient_boosting_tuned.joblib` for generating test predictions.
+
+See the [full model optimization report](reports/model_optimization_summary.md) for tuning details and performance comparisons.
