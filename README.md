@@ -1,5 +1,113 @@
 # House Price Prediction
 
+## Getting Started
+
+### Prerequisites
+
+- Python 3.12
+- Git
+- VS Code (optional)
+
+### Installation
+
+**1. Clone the repository (Windows / macOS / Linux):**
+
+```bash
+git clone https://github.com/tyaginishant0071-hash/House-Price-Prediction.git
+```
+
+**2. Navigate to the project directory:**
+
+```bash
+cd House-Price-Prediction
+```
+
+**3. Create a virtual environment:**
+
+**Windows (PowerShell / CMD):**
+
+```powershell
+py -3.12 -m venv venv
+```
+
+**macOS / Linux:**
+
+```bash
+python3.12 -m venv venv
+```
+
+*Ensure Python 3.12 is installed and accessible from your terminal.*
+
+**4. Activate the virtual environment:**
+
+**Windows (PowerShell):**
+
+```powershell
+.\venv\Scripts\Activate.ps1
+```
+
+**Windows (Command Prompt):**
+
+```cmd
+venv\Scripts\activate.bat
+```
+
+**macOS / Linux:**
+
+```bash
+source venv/bin/activate
+```
+
+**5. Install dependencies (all operating systems):**
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+**6. Verify installed dependencies:**
+
+```bash
+python -m pip check
+```
+
+Expected output:
+
+```text
+No broken requirements found.
+```
+
+### Dataset
+
+Download the dataset from Kaggle:
+
+[House Prices — Advanced Regression Techniques](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/data)
+
+**Dataset setup:**
+
+1. Download `train.csv` and `test.csv`.
+2. Create the `data/raw/` directory if it does not exist.
+3. Place both CSV files inside `data/raw/`.
+4. Create the `data/processed/` directory if it does not exist.
+
+**Expected directory structure:**
+
+```text
+House-Price-Prediction/
+├── data/
+│   ├── raw/
+│   │   ├── train.csv
+│   │   └── test.csv
+│   └── processed/
+├── models/
+├── notebooks/
+├── reports/
+├── requirements.txt
+└── README.md
+```
+
+**Note:** Raw and processed datasets are excluded from Git tracking through `.gitignore`. Download the original dataset from Kaggle before running the project.
+
+
 ## Exploratory Data Analysis
 
 - The data contains 1,460 training rows and 1,459 test rows. `SalePrice` is available only in training.
