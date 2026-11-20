@@ -107,6 +107,44 @@ House-Price-Prediction/
 
 **Note:** Raw and processed datasets are excluded from Git tracking through `.gitignore`. Download the original dataset from Kaggle before running the project.
 
+## Project Execution
+
+Run the following scripts in order from the project root directory.
+
+### 1. Exploratory Data Analysis
+```bash
+python notebooks/eda.py
+```
+
+### 2. Data Cleaning
+```bash
+python notebooks/data_cleaning.py
+```
+
+### 3. Feature Engineering
+```bash
+python notebooks/feature_engineering.py
+```
+
+### 4. Data Preprocessing
+```bash
+python notebooks/data_preprocessing.py
+```
+
+### 5. Model Training
+```bash
+python notebooks/model_training.py
+```
+
+### 6. Model Optimization
+Run the model optimization script after training.
+
+### 7. Final Prediction
+```bash
+python notebooks/final_prediction.py
+```
+
+The final submission file is saved to `data/processed/submission.csv`.
 
 ## Exploratory Data Analysis
 
